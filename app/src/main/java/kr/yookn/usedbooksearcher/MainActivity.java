@@ -18,7 +18,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    private String htmlPageUrl = "http://www.yes24.com/Mall/buyback/Search?CategoryNumber=018&SearchWord=9788936473617&SearchDomain=BOOK,FOREIGN&BuybackAccept=N";
+    private String yes24htmlPageUrl =
+            "http://www.yes24.com/Mall/buyback/Search?CategoryNumber=018&SearchWord=9788936473617&SearchDomain=BOOK,FOREIGN&BuybackAccept=N";
+    private String aladinhtmlPageUrl
+            = "http://www.aladin.co.kr/shop/usedshop/wc2b_search.aspx?ActionType=1&SearchTarget=Book&KeyWord=9788936473617&x=22&y=30";
+    private String interparkhtmlPageUrl
+            = "http://book.interpark.com/display/buyGoods.do?_method=search&sc.searchWd=9788936473617&sc.searchTarget=isbn&sc.searchTp=01&sc.row=20&sc.page=1";
+
+
     private TextView textviewHtmlDocument;
     private String htmlContentInStringFormat;
     ArrayList<IsbnInfo>   isbnInfos = new ArrayList<IsbnInfo>();
@@ -56,16 +63,18 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                Document doc = Jsoup.connect(htmlPageUrl).get();
-                Elements links = doc.select(".bbG_price > table > tbody > tr");
 
 
-                String originalMoney="";
-                String topMoney="",middleMoney="",lowMoney = "";
+
+                String originalMoney="",topMoney="",middleMoney="",lowMoney = "";
+
+                Document doc = Jsoup.connect(yes24htmlPageUrl).get();
+                Elements links = doc.select(".bbG_price > table > tbody ");
+
                 for (Element link : links) {
                     htmlContentInStringFormat += (link.attr("abs:href")
                             + "("+link.text().trim() + ")\n");
-                    String[] priceInfo = link.text().trim().split(",");
+                    String[] priceInfo = link.text().trim().split("원");
 
                          originalMoney = priceInfo[0];
 
@@ -77,27 +86,63 @@ public class MainActivity extends AppCompatActivity {
 
                 }
                 BookInfo bookInfo1 = new BookInfo("yes24",originalMoney, topMoney, middleMoney, lowMoney);
-                BookInfo bookInfo2 = new BookInfo("interpark",originalMoney, topMoney, middleMoney, lowMoney);
+
+
+                originalMoney="";topMoney="";middleMoney="";lowMoney = "";
+                 doc = Jsoup.connect(aladinhtmlPageUrl).get();
+                 links = doc.select(".c2b_tablet3");
+                int ij = 0;
+                for (Element link : links) {
+                    htmlContentInStringFormat += (link.attr("abs:href")
+                            + "("+link.text().trim() + ")\n");
+
+                    if (ij == 0 ) {
+                        originalMoney = link.text().trim();
+                    }
+                    if (ij == 1 ) {
+                        topMoney = link.text().trim();
+                    }
+                    if (ij == 2 ) {
+                        middleMoney = link.text().trim();
+                    }
+                    if (ij == 3 ) {
+                        lowMoney = link.text().trim();
+                    }
+                    ij++;
+                }
+                BookInfo bookInfo2 = new BookInfo("aladin",originalMoney, topMoney, middleMoney, lowMoney);
+
+
+                originalMoney="";topMoney="";middleMoney="";lowMoney = "";
+                 doc = Jsoup.connect(interparkhtmlPageUrl).get();
+                 links = doc.select(".expectedPrice").select("strong");
+                topMoney = links.text().trim();
+
+
+                BookInfo bookInfo3 = new BookInfo("interpark",originalMoney, topMoney, middleMoney, lowMoney);
+
+
+
+
                 IsbnInfo isbnInfo = new IsbnInfo("1234");
                 isbnInfo.getBookinfo().add(bookInfo1);
                 isbnInfo.getBookinfo().add(bookInfo2);
+                isbnInfo.getBookinfo().add(bookInfo3);
 
-                BookInfo bookInfo3 = new BookInfo("yes24-1",originalMoney, topMoney, middleMoney, lowMoney);
-                BookInfo bookInfo4 = new BookInfo("interpark-2",originalMoney, topMoney, middleMoney, lowMoney);
-                IsbnInfo isbnInfo2 = new IsbnInfo("5678");
 
-                isbnInfo2.getBookinfo().add(bookInfo3);
-                isbnInfo2.getBookinfo().add(bookInfo4);
 
 
                 isbnInfos.add(isbnInfo);
-                isbnInfos.add(isbnInfo2);
 
 
                 for (int i=0; i < isbnInfos.size(); i++) {
 
                     IsbnInfo row = isbnInfos.get(i);
                     Log.d("entrv","aa >> " + row.getIsbn());
+                    for (int j=0; j < isbnInfo.getBookinfo().size(); j++) {
+                        BookInfo b = isbnInfo.getBookinfo().get(j);
+                        Log.d("entrv","bb >> " +b.getSitename() + " >> " + b.getTopMoney());
+                    }
 
                 }
 
