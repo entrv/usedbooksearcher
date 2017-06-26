@@ -71,8 +71,9 @@
             android:layout_height="wrap_content"
             android:text="최상"
             android:id="@+id/topPriceClick"
-android:background="#EF473A"
-
+            android:background="#EF473A"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
             />
         <Button
             android:layout_width="wrap_content"
@@ -80,6 +81,8 @@ android:background="#EF473A"
             android:text="중상"
             android:id="@+id/middlePriceClick"
             android:background="#FFC900"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
             />
         <Button
             android:layout_width="wrap_content"
@@ -87,6 +90,7 @@ android:background="#EF473A"
             android:text="상"
             android:id="@+id/lowPriceClick"
             android:background="#FFC900"
+            android:layout_weight="1"
             />
         </LinearLayout>
     <LinearLayout
