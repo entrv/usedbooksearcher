@@ -14,9 +14,13 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -71,6 +75,22 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     //private ActionModeCallback actionModeCallback;
     private ActionMode actionMode;
 
+    private Button yes24TotalPrice, aladinTotalPrice, interparkTotalPrice;
+    private AdView mAdView;
+    // Quit Ad Dialog
+    private AdRequest mQuitAdRequest;
+    private AdView mQuitMediumAdView;
+    private AdView mQuitLargeBannerAdView;
+    InterstitialAd interstitial;
+    @Override
+    public void onSetPrice(int position) {
+        if (actionMode == null) {
+            // actionMode = startSupportActionMode(actionModeCallback);
+        }
+        setTotalPrice();
+        // toggleSelection(position);
+    }
+
     @Override
     public void onIconClicked(int position) {
         if (actionMode == null) {
@@ -115,6 +135,11 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     public void onRefresh() {
         // swipe refresh is performed, fetch the messages again
         //getInbox();
+        Log.i("entrv", ">>> swipeRefreshLayout   :  " );
+        swipeRefreshLayout.setRefreshing(true);
+        //getInbox();
+        mAdapter.notifyDataSetChanged();
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -122,6 +147,9 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        yes24TotalPrice = (Button) findViewById(R.id.yes24TotalPrice) ;
+        aladinTotalPrice = (Button) findViewById(R.id.aladinTotalPrice) ;
+        interparkTotalPrice = (Button) findViewById(R.id.interparkTotalPrice) ;
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -134,6 +162,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 isbnString = "9791187799030";
                 JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(isbnString);
                 jsoupAsyncTask.execute();
+
+
             }
         });
 
@@ -155,7 +185,11 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 new Runnable() {
                     @Override
                     public void run() {
+                        Log.i("entrv", ">>> swipeRefreshLayout   :  " );
+                        swipeRefreshLayout.setRefreshing(true);
                         //getInbox();
+                        mAdapter.notifyDataSetChanged();
+                        swipeRefreshLayout.setRefreshing(false);
                     }
                 }
         );
@@ -183,6 +217,10 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         isbnString = "9788936473617";
         JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(isbnString);
         jsoupAsyncTask.execute();
+
+        mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
     }
     @Override
@@ -303,7 +341,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 for (Element link : links) {
                     htmlContentInStringFormat += (link.attr("abs:href")
                             + "("+link.text().trim() + ")\n");
-                    String[] priceInfo = link.text().trim().split("원");
+                    String[] priceInfo = link.text().trim().replace(",","").split("원");
 
                          originalMoney = priceInfo[0];
 
@@ -327,15 +365,23 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
                     if (ij == 0 ) {
                         originalMoney = link.text().trim();
+                        originalMoney = originalMoney.replace("원","");
+                        originalMoney = originalMoney.replace(",","");
                     }
                     if (ij == 1 ) {
                         topMoney = link.text().trim();
+                        topMoney = topMoney.replace("원","");
+                        topMoney = topMoney.replace(",","");
                     }
                     if (ij == 2 ) {
                         middleMoney = link.text().trim();
+                        middleMoney = middleMoney.replace("원","");
+                        middleMoney = middleMoney.replace(",","");
                     }
                     if (ij == 3 ) {
                         lowMoney = link.text().trim();
+                        lowMoney = lowMoney.replace("원","");
+                        lowMoney = lowMoney.replace(",","");
                     }
                     ij++;
                 }
@@ -403,7 +449,91 @@ cds.add(cd);
         protected void onPostExecute(Void result) {
             //textviewHtmlDocument.setText(htmlContentInStringFormat);
             mAdapter.notifyDataSetChanged();
+            setTotalPrice();
         }
+    }
+
+    public void setTotalPrice() {
+       int yes24PriceTotal=0, aladinPriceTotal=0, interparkPriceTotal=0;
+
+        for (int i=0; i < isbnInfos.size(); i++) {
+            final IsbnInfo isbnInfo = isbnInfos.get(i);
+
+            Log.d("entrv","aa1 >> " + isbnInfo.getIsbn());
+            IsbnInfo.NaverBookItem naverBookItems = isbnInfo.getNaverBookItems().get(0);
+            Log.d("entrv","aa1 >> " + naverBookItems.getPrice());
+            Log.d("entrv","aa1 >> " + naverBookItems.getImage());
+            Log.d("entrv","aa1 >> " + naverBookItems.getTitle());
+            Log.d("entrv","aa1 >> " + naverBookItems.getDescription());
+
+
+            String yes24Price = "", aladinPrice = "", interparkPrice = "";
+
+            for (int j=0; j < isbnInfo.getBookinfo().size(); j++) {
+                BookInfo b = isbnInfo.getBookinfo().get(j);
+                if (isbnInfo.getShowPrice() == 1) {
+                    if (b.getSitename().equals("yes24")) {
+                        yes24Price = b.getTopMoney().trim();
+                    }
+                    if (b.getSitename().equals("aladin")) {
+                        aladinPrice = b.getTopMoney();
+                    }
+                    if (b.getSitename().equals("interpark")) {
+                        interparkPrice = b.getTopMoney();
+                    }
+                    //최상
+                } else if (isbnInfo.getShowPrice() == 2) {
+                    if (b.getSitename().equals("yes24")) {
+                        yes24Price = b.getMiddleMoney().trim();
+                    }
+                    if (b.getSitename().equals("aladin")) {
+                        aladinPrice = b.getMiddleMoney();
+                    }
+                    if (b.getSitename().equals("interpark")) {
+                        interparkPrice = b.getMiddleMoney();
+                    }
+                    //중상
+                } else if (isbnInfo.getShowPrice() == 3) {
+                    //상
+                    if (b.getSitename().equals("yes24")) {
+                        yes24Price = b.getLowMoney().trim();
+                    }
+                    if (b.getSitename().equals("aladin")) {
+                        aladinPrice = b.getLowMoney();
+                    }
+                    if (b.getSitename().equals("interpark")) {
+                        interparkPrice = b.getLowMoney();
+                    }
+                }
+
+
+            }
+            Log.d("entrv","aabb >> " + yes24Price);
+            Log.d("entrv","aabb >> " + aladinPrice);
+            Log.d("entrv","aabb >> " + interparkPrice);
+            yes24PriceTotal += Integer.parseInt(yes24Price);
+            aladinPriceTotal += Integer.parseInt(aladinPrice);
+            interparkPriceTotal += Integer.parseInt(interparkPrice);
+
+        }
+
+        OnNewSensorData(yes24PriceTotal, aladinPriceTotal, interparkPriceTotal );
+
+
+
+
+    }
+    public void OnNewSensorData(final int yes24PriceTotal, final int aladinPriceTotal, final int interparkPriceTotal ) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                // use data here
+                yes24TotalPrice.setText(String.valueOf(yes24PriceTotal));
+                aladinTotalPrice.setText(String.valueOf(aladinPriceTotal));
+                interparkTotalPrice.setText(String.valueOf(interparkPriceTotal));
+                Log.d("entrv","mAdapter.getItemCount() >>>" + mAdapter.getItemCount());
+                recyclerView.scrollToPosition(mAdapter.getItemCount() -1 );
+            }
+        });
     }
 
 }

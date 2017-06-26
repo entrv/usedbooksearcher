@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -21,7 +22,164 @@
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_main" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="?actionBarSize">
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="left|center"
+        ads:adSize="SMART_BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id"
 
+        />
+
+        <LinearLayout
+            android:id="@+id/message_container3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_above="@+id/adView"
+            android:layout_alignParentStart="true"
+            android:layout_gravity="bottom"
+
+            android:clickable="true"
+            android:orientation="horizontal"
+            android:paddingBottom="0dp"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:paddingTop="0dp"
+            android:weightSum="3"
+            android:layout_alignParentEnd="true">
+
+            <LinearLayout
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+
+                android:layout_gravity="bottom"
+                android:layout_margin="0dp"
+                android:layout_weight="1"
+
+                android:clickable="true"
+                android:orientation="vertical"
+                android:paddingBottom="0dp"
+                android:paddingLeft="0dp"
+                android:paddingRight="0dp"
+                android:paddingTop="0dp">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_margin="0dp"
+                    android:layout_weight="1"
+                    android:paddingBottom="0dp"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="0dp"
+                    android:paddingTop="0dp"
+                    android:text="yes24"
+
+                    />
+
+                <Button
+                    android:id="@+id/yes24TotalPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="-10dp"
+                    android:layout_weight="1"
+                    android:paddingBottom="0dp"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="0dp"
+                    android:paddingTop="0dp"
+                    android:text="0"
+
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_gravity="bottom"
+                android:layout_weight="1"
+                android:clickable="true"
+
+                android:orientation="vertical"
+                android:paddingBottom="0dp"
+                android:paddingLeft="0dp"
+                android:paddingRight="0dp"
+                android:paddingTop="0dp">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:paddingBottom="0dp"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="0dp"
+                    android:paddingTop="0dp"
+                    android:text="알라딘" />
+
+                <Button
+                    android:id="@+id/aladinTotalPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="-10dp"
+                    android:layout_weight="1"
+                    android:paddingBottom="0dp"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="0dp"
+                    android:paddingTop="0dp"
+                    android:text="0" />
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_gravity="bottom"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:orientation="vertical"
+                android:paddingBottom="0dp"
+                android:paddingLeft="0dp"
+                android:paddingRight="0dp"
+                android:paddingTop="0dp"
+
+                >
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:paddingBottom="0dp"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="0dp"
+                    android:paddingTop="0dp"
+                    android:text="인터파크" />
+
+                <Button
+                    android:id="@+id/interparkTotalPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="-10dp"
+                    android:layout_weight="1"
+                    android:paddingBottom="0dp"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="0dp"
+                    android:paddingTop="0dp"
+                    android:text="0" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </RelativeLayout>
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
@@ -30,96 +188,6 @@
         android:layout_margin="@dimen/fab_margin"
         app:backgroundTint="@color/colorPrimary"
         app:srcCompat="@drawable/ic_edit_white_24dp" />
-
-    <LinearLayout
-        android:id="@+id/message_container3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/message_container"
-        android:layout_alignRight="@+id/message_container"
-
-        android:layout_below="@+id/message_container2"
-        android:layout_gravity="bottom"
-        android:clickable="true"
-        android:orientation="horizontal"
-        android:paddingRight="@dimen/padding_list_row">
-
-        <LinearLayout
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-
-            android:layout_gravity="bottom"
-            android:clickable="true"
-            android:orientation="vertical"
-            android:paddingRight="@dimen/padding_list_row">
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="yes24" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="yes24"
-                android:id="@+id/yes24TotalPrice"/>
-        </LinearLayout>
-
-        <LinearLayout
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_gravity="bottom"
-            android:clickable="true"
-            android:orientation="vertical"
-            android:paddingRight="@dimen/padding_list_row">
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="알라딘1" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="알라딘1"
-                android:id="@+id/aladinTotalPrice"
-                />
-        </LinearLayout>
-
-        <LinearLayout
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_gravity="bottom"
-            android:clickable="true"
-            android:orientation="vertical"
-            >
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="인터파크" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="인터파크"
-                android:id="@+id/interparkTotalPrice"
-                />
-        </LinearLayout>
-
-    </LinearLayout>
 
 
 </android.support.design.widget.CoordinatorLayout>

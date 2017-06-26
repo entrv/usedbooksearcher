@@ -201,6 +201,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
 
                 holder.topPriceClick.setBackgroundColor(Color.parseColor("#EF473A"));
                 notifyDataSetChanged();
+                listener.onSetPrice(position);
             }
         });
         holder.middlePriceClick.setOnClickListener(new View.OnClickListener() {
@@ -209,6 +210,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
                 isbnInfo.setShowPrice(2);
                 Log.d("entrv","middlePriceClick");
                 notifyDataSetChanged();
+                listener.onSetPrice(position);
                 holder.topPriceClick.setBackgroundColor(Color.parseColor("#FFC900"));
                 holder.middlePriceClick.setBackgroundColor(Color.parseColor("#FFC900"));
                 holder.lowPriceClick.setBackgroundColor(Color.parseColor("#FFC900"));
@@ -222,6 +224,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
                 isbnInfo.setShowPrice(3);
                 Log.d("entrv","lowPriceClick");
                 notifyDataSetChanged();
+                listener.onSetPrice(position);
                 holder.topPriceClick.setBackgroundColor(Color.parseColor("#FFC900"));
                 holder.middlePriceClick.setBackgroundColor(Color.parseColor("#FFC900"));
                 holder.lowPriceClick.setBackgroundColor(Color.parseColor("#FFC900"));
@@ -428,5 +431,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
         void onMessageRowClicked(int position);
 
         void onRowLongClicked(int position);
+
+        void onSetPrice(int position);
     }
 }
