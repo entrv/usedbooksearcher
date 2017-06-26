@@ -115,12 +115,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="알라딘12"/>
+            android:text="알라딘"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="인터파크11"/>
+            android:text="인터파크"/>
 
     </LinearLayout>
     <LinearLayout
