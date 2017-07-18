@@ -10,7 +10,7 @@ public class BookInfo {
     String topMoney;
     String middleMoney;
     String lowMoney;
-d
+
     public BookInfo(String sitename, String orginalMoney, String topMoney, String middleMoney, String lowMoney) {
         this.sitename = sitename;
         this.orginalMoney = orginalMoney;
